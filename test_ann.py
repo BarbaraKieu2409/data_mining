@@ -1,6 +1,3 @@
-"""Thực hiện tuning params cho thuật toán MLPRegressor/MLPClassifier
-trên bộ dữ liệu Boston Housing dataset."""
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -10,9 +7,7 @@ from sklearn.metrics import mean_absolute_error, r2_score, accuracy_score
 
 
 if __name__ == "__main__":
-    df = pd.read_csv(
-        "C:/Users/Barbara Kieu/Downloads/data_mining/resource/BostonHousing.csv"
-    )
+    df = pd.read_csv("..../BostonHousing.csv")
     X = df.iloc[:, :-1]  # all columns except target
     y = df.iloc[:, -1]
     X_train, X_test, y_train, y_test = train_test_split(
@@ -24,8 +19,8 @@ if __name__ == "__main__":
     score = model.score(X_test, y_test)
     print(score)
 
-# Tuning hồi quy, classifier
-# Xác định lưới tham số để tuning
+# Tuning classifier
+# define parametric for tuning
 param_grid = {
     "hidden_layer_sizes": [(50,), (100,), (50, 50)],
     "activation": ["relu", "tanh"],
@@ -37,7 +32,7 @@ param_grid = {
 # Create an MLPClassifier instance
 mlp = MLPClassifier(max_iter=500)
 
-# GridSearchCV để tìm bộ tham số tốt nhất
+# GridSearchCV to find the best parameter set
 grid_search = GridSearchCV(mlp, param_grid, cv=3, verbose=1, n_jobs=-1)
 grid_search.fit(X_train, y_train)
 
@@ -49,10 +44,3 @@ print("Best score:", grid_search.best_score_)
 y_pred = (model.predict(X_test) > 0.5).astype(np.int32)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Test Accuracy: {accuracy:.2f}")
-
-# Plot
-# plt.plot(best_model.loss_curve_)
-# plt.title("Loss Curve")
-# plt.xlabel("Iterations")
-# plt.ylabel("Loss")
-# plt.show()
